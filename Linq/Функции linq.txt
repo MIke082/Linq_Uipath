@@ -1,0 +1,62 @@
+Функция проверяет если Count
+
+Assign
+
+DtEmployeeDetails.AsEnumerable.Where(Function(x) Cint(x("Rating - Имя столбца").ToString) > 5  And CInt(x("Tenure - Имя столбца").ToString) = 4).CopyToDataTable
+
+Сравниваем две колонки в двух таблицах если совпадает
+
+Assign
+
+DtMouthlyPurcha.AsEnumerable().Where(Function(row)  DtReferenceSheet.AsEnumerable.Any(Function(x) x("Item Name - Имя столбца").ToString = row("Item Description - Имя столбца").ToString)).CopyToDataTable
+
+
+Сравниваем две колонки в двух таблицах если не совпадает 
+
+Assign
+
+DtMouthlyPurcha.AsEnumerable().Where(Function(row) Not  DtReferenceSheet.AsEnumerable.Any(Function(x) x("Item Name - Имя столбца").ToString = row("Item Description - Имя столбца").ToString)).CopyToDataTable
+
+Извлекаем только один столбец с таблицы
+
+
+Проверяем если в столбце есть например price больше 1000 
+
+Assign
+
+DtMouthlyPurcha.AsEnumerable.Where(Function(x) CInt(x("Price - Имя столбца").ToString) > 1000).CopyToDataTable
+
+Выводим имена в у которых price > 1000
+
+Assign
+
+DtMouthlyPurcha.AsEnumerable.Where(Function(x) CInt(x("Price - Имя столбца").ToString) > 1000).Select(Function(x) x("Item Description - Имя столбца").ToString).ToArray
+
+Выводим количество элементов  у которых price > 1000
+
+Assign
+
+DtMouthlyPurcha.AsEnumerable.Where(Function(x) CInt(x("Price - Имя столбца").ToString) > 1000).Select(Function(x) x("Price - Имя столбца").ToString).Count.ToString
+
+
+Групируем все по одному значению:
+
+ForEach
+
+Используем System.linq.Igrouping<System.Stirng, System.Data.DataRow>
+
+DtGroupBy.AsEnumerable().GroupBy(Function(row) row("Имя столбца").ToString)
+
+Выводим только по одному первому значению из каждого столбца
+
+Assign
+
+(From row In DtGroupBy 
+Group row By row("Item Description").ToString.trim Into grp= Group 
+Select grp.First).CopyToDataTable
+
+Больше чем один столбец 
+
+(From row In DtGroupBy 
+Group row By a = row("Item Description").ToString.trim, b = row("Quantity1").ToString.trim, c = row("Price").ToString.trim Into grp= Group 
+Select grp.First).CopyToDataTable
